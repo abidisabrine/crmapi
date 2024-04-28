@@ -19,8 +19,8 @@ public class UserService {
 		return repository.save(user);
 	}
 	
-	public List<User> findUsers() { 
-		return repository.findAll();
+	public List<User> findUsers(String query) { 
+		return repository.findByFullnameContains(query);
 	}
 	
 	public Optional<User> findUser(Long id) { 
