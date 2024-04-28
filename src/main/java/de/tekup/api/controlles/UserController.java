@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.tekup.api.models.User;
 import de.tekup.api.repositories.UserRepository;
+import de.tekup.api.services.UserService;
 
 
 @RestController
@@ -24,21 +25,21 @@ import de.tekup.api.repositories.UserRepository;
 public class UserController {
 	
 	@Autowired
-	private UserRepository repository;
+	private UserService userService;
 	
 	@GetMapping 
 	public ResponseEntity<List<User>> findUsers() {
-		return new ResponseEntity(repository.findAll(), HttpStatus.OK) ;
+		return new ResponseEntity(userService.findUsers(), HttpStatus.OK) ;
 	}
 	
 	@PostMapping
 	public ResponseEntity<User> addUser(@RequestBody User user) {
-		return new ResponseEntity(repository.save(user), HttpStatus.CREATED) ;
+		return new ResponseEntity(userService.addUser(user), HttpStatus.CREATED) ;
 	}
 	
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userService.findUser(id);
 		if (user.isEmpty()) return new ResponseEntity(HttpStatus.NOT_FOUND);
 		return new ResponseEntity(user.get(), HttpStatus.OK) ;
 	}
@@ -46,19 +47,19 @@ public class UserController {
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
 			@RequestBody User updated) {
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userService.findUser(id);
 		if (user.isEmpty()) return new ResponseEntity(HttpStatus.NOT_FOUND);
 		user.get().setFirstname(updated.getFirstname());
 		// TODO : complete update logic 
-		repository.save(user.get());
+		userService.updateUser(user.get());
 		return new ResponseEntity(user.get(), HttpStatus.OK) ;
 	}
 	
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
-		if (!repository.existsById(id))
+		if (userService.findUser(id) == null)
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		repository.deleteById(id);
+		userService.deleteUser(id);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);	
 	}
 	
