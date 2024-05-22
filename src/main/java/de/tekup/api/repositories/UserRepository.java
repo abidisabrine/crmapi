@@ -12,6 +12,7 @@ import de.tekup.api.models.User;
 public interface UserRepository extends JpaRepository <User, Long>  {
 	
 	public List<User> findByFullnameContains(String q);
+	public User findByUsername(String name);
 	
 	//public List<User> findByFullnameContainsAndEntrepriseEqual(String q ,Entreprise e );
 

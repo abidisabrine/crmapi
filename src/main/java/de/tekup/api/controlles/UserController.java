@@ -27,61 +27,60 @@ import de.tekup.api.repositories.UserRepository;
 import de.tekup.api.services.UserService;
 import jakarta.validation.Valid;
 
-
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
-	@GetMapping 
+
+	@GetMapping
 	public ResponseEntity<List<User>> findUsers(@RequestParam("q") String q) {
-		return new ResponseEntity(userService.findUsers(q), HttpStatus.OK) ;
+		return new ResponseEntity(userService.findUsers(q), HttpStatus.OK);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
-		return new ResponseEntity(userService.addUser(user), HttpStatus.CREATED) ;
+		return new ResponseEntity(userService.addUser(user), HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
 		Optional<User> user = userService.findUser(id);
-		if (user.isEmpty()) return new ResponseEntity(HttpStatus.NOT_FOUND);
-		return new ResponseEntity(user.get(), HttpStatus.OK) ;
+		if (user.isEmpty())
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		return new ResponseEntity(user.get(), HttpStatus.OK);
 	}
-	
+
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") Long id,
-			@RequestBody @Valid User updated) {
+	public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody @Valid User updated) {
 		Optional<User> user = userService.findUser(id);
-		if (user.isEmpty()) return new ResponseEntity(HttpStatus.NOT_FOUND);
+		if (user.isEmpty())
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		user.get().setFullname(updated.getFullname());
-		// TODO : complete update logic 
+		// TODO : complete update logic
 		userService.updateUser(user.get());
-		return new ResponseEntity(user.get(), HttpStatus.OK) ;
+		return new ResponseEntity(user.get(), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
 		if (userService.findUser(id) == null)
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		userService.deleteUser(id);
-		return new ResponseEntity(HttpStatus.NO_CONTENT);	
+		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public Map<String, String> handleValidationExceptions(
-	  MethodArgumentNotValidException ex) {
-	    Map<String, String> errors = new HashMap<>();
-	    ex.getBindingResult().getAllErrors().forEach((error) -> {
-	        String fieldName = ((FieldError) error).getField();
-	        String errorMessage = error.getDefaultMessage();
-	        errors.put(fieldName, errorMessage);
-	    });
-	    return errors;
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		return errors;
 	}
-	
+
 }
