@@ -19,12 +19,13 @@ public class WebSecurityConfig {
                 .anyRequest().permitAll()
             );
             //.httpBasic(withDefaults());
+        // TODO http jwt, auth avec jwt
         return http.build();
     }
 	
 	@Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/users","/roles", "/roles/*","/auth","/clients","/clients/*","/subs");
+        return (web) -> web.ignoring().requestMatchers("/*","/*/*");
     }
 	
 	@Bean

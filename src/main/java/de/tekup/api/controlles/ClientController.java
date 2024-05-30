@@ -35,7 +35,7 @@ public class ClientController {
 		return new ResponseEntity(clientService.saveClient(client),HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deleteClient(@PathVariable Long id){
 		clientService.deleteById(id);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
