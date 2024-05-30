@@ -24,7 +24,7 @@ public class WebSecurityConfig {
 	
 	@Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/users","/roles", "/roles/*","/auth");
+        return (web) -> web.ignoring().requestMatchers("/users","/roles", "/roles/*","/auth","/clients","/clients/*","/subs");
     }
 	
 	@Bean

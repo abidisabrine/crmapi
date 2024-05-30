@@ -43,7 +43,7 @@ public class RoleController {
 		service.deleteById(id);
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role updated){
 	    Role role=service.findById(id).get();
